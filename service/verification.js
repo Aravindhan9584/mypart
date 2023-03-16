@@ -1,4 +1,5 @@
 const jwt = require("jsonwebtoken");
+const createError = require("../utility/createError");
 
 const verifytoken = (req, res, next) => {
   authHeaders = req.headers.token;
@@ -11,7 +12,7 @@ const verifytoken = (req, res, next) => {
       next();
     });
   } else {
-    return res.status(500).json({ error: "your not a authenticated" });
+    return next(createError(500, "your not a authenticated"));
   }
 };
 
@@ -21,7 +22,7 @@ const verifytokenandAuth = (req, res, next) => {
     if (req.username.id === req.params.id || req.username.isAdmin) {
       next();
     } else {
-      res.status(403).json("your not allow to do that! ");
+      next(createError(500, "your not allow to do that! "));
     }
   });
 };

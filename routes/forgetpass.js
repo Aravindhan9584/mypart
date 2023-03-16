@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const { token, mailservice } = require("../service/mailservice");
+const { mailservice } = require("../service/mailservice");
 const {
   verifytoken,
   verifytokenandAuth,

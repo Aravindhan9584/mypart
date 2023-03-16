@@ -7,8 +7,8 @@ const {
   verifytokenandAuth,
   verifytokenadmin,
 } = require("../service/verification");
-// const { token } = require("../controler/mail.controller");
-
+/////
+// GetAll User
 router.get("/user", verifytokenadmin, async (req, res) => {
   try {
     const getuser = await User.find().sort({ _id: -1 });
@@ -20,7 +20,7 @@ router.get("/user", verifytokenadmin, async (req, res) => {
 
 // Update user
 
-router.put("/update/:id", verifytokenandAuth, async (req, res) => {
+router.put("/update/:id", verifytokenandAuth, async (req, res, next) => {
   try {
     var salt = bcrypt.genSaltSync(10);
     var hash = bcrypt.hashSync(req.body.password, salt);
@@ -38,18 +38,18 @@ router.put("/update/:id", verifytokenandAuth, async (req, res) => {
     );
     res.status(200).json(edituser);
   } catch (err) {
-    return console.log(err);
+    return next(err);
   }
 });
 
 // get User
 
-router.get("/:id", verifytokenandAuth, async (req, res) => {
+router.get("/:id", verifytokenandAuth, async (req, res, next) => {
   try {
     const getUser = await User.findById(req.params.id);
     res.status(200).json(getUser);
   } catch (err) {
-    return err;
+    return next(err);
   }
 });
 
@@ -60,18 +60,18 @@ router.delete("/:id", verifytokenandAuth, async (req, res) => {
     const deletedUser = await User.findByIdAndDelete(req.params.id);
     res.status(200).json("User has been deleted");
   } catch (err) {
-    return err;
+    return next(err);
   }
 });
 
-router.get("/reset-password/:token", function (req, res) {
-  const { token } = req.params;
-  const user = User.find((user) => user._id === token);
-  if (!user) {
-    return res.status(404).send("Invalid token");
-  }
-  res.render("updatepassword", { token });
-});
+// router.get("/reset-password/:token", function (req, res) {
+//   const { token } = req.params;
+//   const user = User.find((user) => user._id === token);
+//   if (!user) {
+//     return res.status(404).send("Invalid token");
+//   }
+//   res.render("updatepassword", { token });
+// });
 
 // update password user
 router.put("/updatepassword/:token", async (req, res) => {

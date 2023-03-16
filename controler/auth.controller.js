@@ -2,38 +2,38 @@ const router = require("express").Router();
 const User = require("../models/User");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const { createError } = require("../utility/createError");
 
-router.post("/register", async (req, res) => {
+router.post("/register", async (req, res, next) => {
   try {
     const { username } = req.body;
     const existingUser = await User.findOne({
       $or: [{ username }],
     });
     if (existingUser) {
-      return res.status(409).json({ Error: "User Already Existing" });
+      return next(createError(404, "User Already Existing"));
     }
     var salt = bcrypt.genSaltSync(10);
     var hash = bcrypt.hashSync(req.body.password, salt);
     const newUser = await User({ ...req.body, password: hash });
     const savedUser = await newUser.save();
-    res.status(200).json({ Response: "Register Sucessfully" });
+    next(createError(200, "Register Sucessfully"));
   } catch (err) {
-    console.log(err);
+    next(err);
   }
 });
 
 // Login user
 
-router.post("/login", async (req, res) => {
+router.post("/login", async (req, res, next) => {
   try {
     const username = await User.findOne({ username: req.body.username });
-    if (!username) return res.status(200).json({ Error: "User is not found" });
+    if (!username) return next(createError(404, "User is not found"));
     const checkPassword = bcrypt.compareSync(
       req.body.password,
       username.password
     );
-    if (!checkPassword)
-      return res.status(200).json({ ErrorMessage: "wrong password" });
+    if (!checkPassword) return next(createError(500, "wrong password"));
     const accessToken = jwt.sign(
       {
         id: username._id,
@@ -45,7 +45,7 @@ router.post("/login", async (req, res) => {
     const { password, ...others } = username._doc;
     res.status(200).json({ ...others, accessToken });
   } catch (err) {
-    return console.log(err);
+    return next(err);
   }
 });
 
