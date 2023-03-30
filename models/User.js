@@ -1,9 +1,9 @@
 const mongoose = require("mongoose");
 const { boolean } = require("webidl-conversions");
 var uniqueValidator = require("mongoose-unique-validator");
-// const autoIncrement=require('mongoose-auto-increment')
+const autoIncrement = require("mongoose-auto-increment");
 
-// autoIncrement.initialize(mongoose.connection);
+autoIncrement.initialize(mongoose.connection);
 
 const UserSchema = new mongoose.Schema(
   {
@@ -20,6 +20,7 @@ const UserSchema = new mongoose.Schema(
     role: {
       type: String,
       enum: ["Leader", "manager", "Admin", "Agent", "user", "SuperAdmin"],
+      require: true,
       default: "user",
     },
     isAdmin: {

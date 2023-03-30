@@ -9,12 +9,12 @@ const {
 } = require("../service/verification");
 /////
 // GetAll User
-router.get("/user", verifytokenadmin, async (req, res) => {
+router.get("/user", verifytokenadmin, async (req, res, next) => {
   try {
     const getuser = await User.find().sort({ _id: -1 });
     res.send(getuser);
   } catch (error) {
-    console.log(error);
+    next(error);
   }
 });
 

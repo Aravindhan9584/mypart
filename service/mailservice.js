@@ -1,5 +1,5 @@
 const User = require("../models/User");
-const dotenv = require("dotenv");
+// const dotenv = require("dotenv");
 const mailer = require("nodemailer");
 const jwt = require("jsonwebtoken");
 
@@ -9,7 +9,7 @@ const mailservice = async (req, res) => {
     if (!user) {
       res.status(404).json({ error: "User not exist" });
     }
-    console.log("user............", user);
+    // console.log("user............", user);
 
     const token = jwt.sign({ userId: user._id }, "secret-key", {
       expiresIn: "1h",
