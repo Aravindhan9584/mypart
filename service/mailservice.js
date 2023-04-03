@@ -33,7 +33,7 @@ const mailservice = async (req, res) => {
       subject: "Reset your password",
       html: `<h3>Click <a href="${resetlink}">here</a> to reset your password.</h3>`,
     };
-    await transportar.sendMail(mailoption, (error, info) => {
+    await transportar.sendMail(mailoption, (error, info, res) => {
       if (error) {
         console.log(error);
       }
