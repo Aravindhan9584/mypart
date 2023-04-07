@@ -8,19 +8,30 @@ const {
   verifytokenadmin,
 } = require("../service/verification");
 /////
+
+// get User
+
+module.exports.getsingleuser = async (req, res, next) => {
+  try {
+    const getUser = await User.findById(req.params.id);
+    res.status(200).json(getUser);
+  } catch (err) {
+    return next(err);
+  }
+};
 // GetAll User
-router.get("/user", verifytokenadmin, async (req, res, next) => {
+module.exports.getalluser = async (req, res, next) => {
   try {
     const getuser = await User.find().sort({ _id: -1 });
     res.send(getuser);
   } catch (error) {
     next(error);
   }
-});
+};
 
 // Update user
 
-router.put("/update/:id", verifytokenandAuth, async (req, res, next) => {
+module.exports.Updateuser = async (req, res, next) => {
   try {
     var salt = bcrypt.genSaltSync(10);
     var hash = bcrypt.hashSync(req.body.password, salt);
@@ -40,29 +51,18 @@ router.put("/update/:id", verifytokenandAuth, async (req, res, next) => {
   } catch (err) {
     return next(err);
   }
-});
-
-// get User
-
-router.get("/:id", verifytokenandAuth, async (req, res, next) => {
-  try {
-    const getUser = await User.findById(req.params.id);
-    res.status(200).json(getUser);
-  } catch (err) {
-    return next(err);
-  }
-});
+};
 
 // Delete User
 
-router.delete("/:id", verifytokenandAuth, async (req, res) => {
+module.exports.deleteuser = async (req, res) => {
   try {
     const deletedUser = await User.findByIdAndDelete(req.params.id);
     res.status(200).json("User has been deleted");
   } catch (err) {
     return next(err);
   }
-});
+};
 
 // router.get("/reset-password/:token", function (req, res) {
 //   const { token } = req.params;
@@ -74,27 +74,27 @@ router.delete("/:id", verifytokenandAuth, async (req, res) => {
 // });
 
 // update password user
-router.put("/updatepassword/:token", async (req, res) => {
-  try {
-    var salt = bcrypt.genSaltSync(10);
-    var hash = bcrypt.hashSync(req.body.password, salt);
-    if (req.body.password) {
-      req.body.password = hash;
-    }
-    const edituserq = await User.findByIdupdate(
-      req.body.id,
-      {
-        $set: req.body,
-      },
-      {
-        new: true,
-      }
-    );
-    res.status(200).json(edituserq);
-  } catch (err) {
-    return console.log(err);
-  }
-});
+// router.put("/updatepassword/:token", async (req, res) => {
+//   try {
+//     var salt = bcrypt.genSaltSync(10);
+//     var hash = bcrypt.hashSync(req.body.password, salt);
+//     if (req.body.password) {
+//       req.body.password = hash;
+//     }
+//     const edituserq = await User.findByIdupdate(
+//       req.body.id,
+//       {
+//         $set: req.body,
+//       },
+//       {
+//         new: true,
+//       }
+//     );
+//     res.status(200).json(edituserq);
+//   } catch (err) {
+//     return console.log(err);
+//   }
+// });
 
 // router.post("/reset-password", function (req, res) {
 //   const { token, password } = req.body;
@@ -105,4 +105,4 @@ router.put("/updatepassword/:token", async (req, res) => {
 //   user.password = password;
 //   user.resetToken;
 // });
-module.exports = router;
+// module.exports = router;

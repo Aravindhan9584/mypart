@@ -1,10 +1,11 @@
 const Express = require("express");
 const dotenv = require("dotenv");
 const mongoose = require("mongoose");
-const userRouter = require("./controler/UserUpdate");
 const authrouter = require("./controler/auth");
-const profilerouter = require("./routes/profile");
-const forgetpassword = require("./routes/Forget");
+const profilerouter = require("./routers/profile");
+const forgetpassword = require("./routers/Forget");
+const companyrouter = require("./routers/companyrouters");
+const userRouter = require("./routers/Userrouter");
 
 const app = Express();
 dotenv.config();
@@ -27,7 +28,8 @@ app.get("/", (req, res) => {
 app.use("/api/", forgetpassword);
 app.use("/api/auth/", authrouter);
 app.use("/api/", profilerouter);
-app.use("/api/", userRouter);
+app.use("/api/user/", userRouter);
+app.use("/api/company/", companyrouter);
 
 app.use((err, req, res, next) => {
   const errorstatus = err.status || 500;
