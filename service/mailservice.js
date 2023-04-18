@@ -3,23 +3,21 @@ const User = require("../models/User");
 const mailer = require("nodemailer");
 const jwt = require("jsonwebtoken");
 
-const mailservice = async (req, res) => {
+const Forgetpassword = async (req, res) => {
   try {
     const user = await User.findOne({ username: req.body.username });
     if (!user) {
       res.status(404).json({ error: "User not exist" });
     }
-    // console.log("user............", user);
 
-    const token = jwt.sign({ userId: user._id }, "secret-key", {
+    const token = jwt.sign({ id: user._id }, "secret-key", {
       expiresIn: "1h",
     });
-    console.log("token........", token);
     await user.updateOne({
       resetToken: token,
       resetTokenExpires: Date.now() + 3600,
     });
-    const resetlink = `http://localhost:4000/api/updatepassword/${token}`;
+    const resetlink = `http://localhost:4000/api/updatepassword/:id/${token}`;
     const transportar = await mailer.createTransport({
       service: "gmail",
       auth: {
@@ -44,4 +42,13 @@ const mailservice = async (req, res) => {
   }
 };
 
-module.exports = { mailservice };
+// const updatepassword = (req, res) => {
+//   try {
+//     const { id, token } = req.params;
+//     // const
+//   } catch (error) {
+//     console.log(error);
+//   }
+// };
+
+module.exports = { Forgetpassword };

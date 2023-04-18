@@ -1,12 +1,19 @@
 const Company = require("../models/company");
-// const createError = require("../utility/createError");
+const { createError } = require("../utility/createError");
 
 // createcompany
-module.exports.createcompany = async (req, res) => {
+module.exports.createcompany = async (req, res, next) => {
   try {
+    const { companyname } = req.body;
+    const existingcompany = await Company.findOne({
+      $or: [{ companyname }],
+    });
+    if (existingcompany) {
+      return next(createError(404, "company Already Existing"));
+    }
     const newcompany = await Company(req.body);
     const savecompany = await newcompany.save();
-    res.status(200).json("new company created");
+    res.status(200).json(next(createError(200, "new company created")));
   } catch (error) {
     console.log(error);
   }
@@ -32,9 +39,8 @@ module.exports.getallcompany = async (req, res, next) => {
     console.log(error);
   }
 };
-// .sort({ _id: -1 })
-// Update Company
 
+// Update Company
 module.exports.Upadtecompany = async (req, res, next) => {
   try {
     const editCompany = await Company.findByIdAndUpdate(
@@ -51,6 +57,8 @@ module.exports.Upadtecompany = async (req, res, next) => {
     return console.log(err);
   }
 };
+
+// Deletecompany
 
 module.exports.deletecompany = async (req, res) => {
   try {

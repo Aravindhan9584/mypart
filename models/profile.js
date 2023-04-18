@@ -7,7 +7,7 @@ const profileSchema = new mongoose.Schema(
       required: true,
     },
   },
-  { timeseries: true }
+  { timestamps: true }
 );
 
 module.exports = mongoose.model("Profile", profileSchema);

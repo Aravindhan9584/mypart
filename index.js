@@ -1,16 +1,20 @@
 const Express = require("express");
 const dotenv = require("dotenv");
 const mongoose = require("mongoose");
-const authrouter = require("./controler/auth");
+const authrouter = require("./routers/auth");
 const profilerouter = require("./routers/profile");
-const forgetpassword = require("./routers/Forget");
+const forgetpassword = require("./routers/auth");
 const companyrouter = require("./routers/companyrouters");
 const userRouter = require("./routers/Userrouter");
+const cookieParser = require("cookie-parser");
+var morgan = require("morgan");
 
+//middleware
 const app = Express();
 dotenv.config();
 mongoose.set("strictQuery", false);
 app.use(Express.json());
+app.use(cookieParser());
 
 const mongodb = async () => {
   try {
@@ -20,14 +24,17 @@ const mongodb = async () => {
     console.log(error);
   }
 };
+mongoose.connection.on("disconnected", () => {
+  console.log("MOngodb Disconnected");
+});
 
 app.get("/", (req, res) => {
   res.send("Hi this is from home page");
 });
-
+// middelware
 app.use("/api/", forgetpassword);
 app.use("/api/auth/", authrouter);
-app.use("/api/", profilerouter);
+app.use("/api/profile/", profilerouter);
 app.use("/api/user/", userRouter);
 app.use("/api/company/", companyrouter);
 

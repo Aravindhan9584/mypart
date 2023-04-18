@@ -31,6 +31,14 @@ const UserSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+// UserSchema.pre("save", async function (next) {
+//   if (!this.isModified("password")) {
+//     return next();
+//   }
+//   const hash = await bcrypt.hash(this.password, 10(bcryptSalt));
+//   this.password = hash;
+//   next();
+// });
 
 UserSchema.plugin(uniqueValidator);
 

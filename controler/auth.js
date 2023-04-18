@@ -4,12 +4,10 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { createError } = require("../utility/createError");
 
-router.post("/register", async (req, res, next) => {
+module.exports.Registeruser = async (req, res, next) => {
   try {
     const { username } = req.body;
-    const existingUser = await User.findOne({
-      $or: [{ username }],
-    });
+    const existingUser = await User.findOne({ username: username });
     if (existingUser) {
       return next(createError(404, "User Already Existing"));
     }
@@ -21,11 +19,11 @@ router.post("/register", async (req, res, next) => {
   } catch (err) {
     next(err);
   }
-});
+};
 
 // Login user
 
-router.post("/login", async (req, res, next) => {
+module.exports.Login = async (req, res, next) => {
   try {
     const username = await User.findOne({ username: req.body.username });
     if (!username) return next(createError(404, "User is not found"));
@@ -34,7 +32,7 @@ router.post("/login", async (req, res, next) => {
       username.password
     );
     if (!checkPassword) return next(createError(500, "wrong password"));
-    const accessToken = jwt.sign(
+    const token = jwt.sign(
       {
         id: username._id,
         isAdmin: username.isAdmin,
@@ -43,10 +41,30 @@ router.post("/login", async (req, res, next) => {
       { expiresIn: "5d" }
     );
     const { password, ...others } = username._doc;
-    res.status(200).json({ ...others, accessToken });
+    res
+      .cookie("accessToken", token, {
+        httponly: true,
+      })
+      .status(200)
+      .json(others);
+    // res.status(200).json({ ...others, accessToken });
   } catch (err) {
     return next(err);
   }
-});
+};
 
-module.exports = router;
+// module.exports.signup = async (User) => {
+//   let user = await User.findOne({ email: username.email });
+//   if (user) {
+//     throw new Error("Email already exist");
+//   }
+//   user = new User(data);
+//   const token = JWT.sign({ id: user._id }, JWTSecret);
+//   await user.save();
+//   return (User = {
+//     userId: user._id,
+//     email: user.email,
+//     name: user.name,
+//     token: token,
+//   });
+// };
