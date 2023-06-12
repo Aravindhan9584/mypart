@@ -7,3 +7,12 @@ const createError = (status, message) => {
 };
 
 module.exports = { createError };
+
+// var Storage = multer.diskStorage({
+//   destination: (req, file, cb) => {
+//     cb(null, "upload");
+//   },
+//   filename: (req, file, cb) => {
+//     null, file.originalname;
+//   },
+// });

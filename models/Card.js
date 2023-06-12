@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
+const User = require("../models/User");
 
-const companySchema = new mongoose.Schema(
+const CardSchema = new mongoose.Schema(
   {
     createdBy: {
       type: mongoose.Schema.Types.ObjectId,
@@ -17,24 +18,39 @@ const companySchema = new mongoose.Schema(
       required: true,
       unique: true,
     },
+    logo: { type: Buffer },
+    countrycode: {
+      type: String,
+    },
     address: {
       addressline1: {
         type: String,
+        trim: true,
+        default: "",
       },
       addressline2: {
         type: String,
+        trim: true,
+        default: "",
       },
       zipcode: {
         type: Number,
-        // required: true,
+      },
+      country: {
+        type: String,
+        trim: true,
+        default: "",
       },
     },
-    ph: {
+    location: [],
+    sociallink: [],
+    phonenumber: {
       type: Number,
       required: true,
     },
+    Website: [],
   },
   { timestamps: true }
 );
 
-module.exports = mongoose.model("Company", companySchema);
+module.exports = mongoose.model("Card", CardSchema);

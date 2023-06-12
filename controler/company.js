@@ -1,19 +1,46 @@
 const Company = require("../models/company");
 const { createError } = require("../utility/createError");
+const User = require("../models/User");
 
 // createcompany
+// module.exports.createcompany = async (req, res, next) => {
+//   try {
+//     const { companyname } = req.body;
+//     const existingcompany = await Company.findOne({ companyname: companyname });
+//     if (existingcompany) {
+//       return next(createError(404, "company Already Existing"));
+//     }
+//     const newcompany = await Company(req.body);
+//     const savecompany = await newcompany.save();
+//     res.status(200).json(next(createError(200, "new company created")));
+//   } catch (error) {
+//     console.log(error);
+//   }
+// };
+
 module.exports.createcompany = async (req, res, next) => {
   try {
-    const { companyname } = req.body;
-    const existingcompany = await Company.findOne({
-      $or: [{ companyname }],
-    });
-    if (existingcompany) {
-      return next(createError(404, "company Already Existing"));
-    }
-    const newcompany = await Company(req.body);
+    const { createdBy } = req.body;
+    // const { companyname, email } = req.body;
+    // const existingcard = await Card.findOne({
+    //   companyname: companyname,
+    //   email: email,
+    // });
+    // if (existingcard) {
+    //   return next(createError(404, "Card Already Existing"));
+    // }
+    const user = await User.findOne({ createdBy: createdBy }).populate(
+      "createdBy"
+    );
+    console.log(user);
+    const newcompany = await Company(req.body, { createdBy: user });
+    console.log(newcompany);
+    // const  = await Card(req.body);
     const savecompany = await newcompany.save();
-    res.status(200).json(next(createError(200, "new company created")));
+    res
+      .status(200)
+      // .json(next(createError(200, "New Company created")))
+      .json(savecompany);
   } catch (error) {
     console.log(error);
   }

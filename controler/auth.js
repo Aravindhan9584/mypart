@@ -4,6 +4,8 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { createError } = require("../utility/createError");
 
+// Register User
+
 module.exports.Registeruser = async (req, res, next) => {
   try {
     const { username } = req.body;
@@ -15,7 +17,8 @@ module.exports.Registeruser = async (req, res, next) => {
     var hash = bcrypt.hashSync(req.body.password, salt);
     const newUser = await User({ ...req.body, password: hash });
     const savedUser = await newUser.save();
-    next(createError(200, "Register Sucessfully"));
+    res.send(savedUser);
+    next();
   } catch (err) {
     next(err);
   }
@@ -40,6 +43,7 @@ module.exports.Login = async (req, res, next) => {
       process.env.JWT_PASS,
       { expiresIn: "5d" }
     );
+
     const { password, ...others } = username._doc;
     res
       .cookie("accessToken", token, {
@@ -52,6 +56,8 @@ module.exports.Login = async (req, res, next) => {
     return next(err);
   }
 };
+
+module.exports.logout = async (req, res, next) => {};
 
 // module.exports.signup = async (User) => {
 //   let user = await User.findOne({ email: username.email });

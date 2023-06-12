@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const { boolean } = require("webidl-conversions");
 var uniqueValidator = require("mongoose-unique-validator");
 const autoIncrement = require("mongoose-auto-increment");
+// const Validationof = require("validation");
 
 autoIncrement.initialize(mongoose.connection);
 
@@ -9,37 +10,32 @@ const UserSchema = new mongoose.Schema(
   {
     username: {
       type: String,
-      require: true,
+      required: true,
       unique: true,
+      min: 5,
+      max: 30,
     },
     password: {
       type: String,
-      require: true,
+      required: true,
       min: 6,
+      max: 15,
     },
     role: {
       type: String,
       enum: ["Leader", "manager", "Admin", "Agent", "user", "SuperAdmin"],
-      require: true,
+      required: true,
       default: "user",
     },
     isAdmin: {
       type: Boolean,
-      require: true,
+      required: true,
       default: false,
+      color: "Red",
     },
   },
   { timestamps: true }
 );
-// UserSchema.pre("save", async function (next) {
-//   if (!this.isModified("password")) {
-//     return next();
-//   }
-//   const hash = await bcrypt.hash(this.password, 10(bcryptSalt));
-//   this.password = hash;
-//   next();
-// });
-
 UserSchema.plugin(uniqueValidator);
 
 module.exports = mongoose.model("User", UserSchema);
