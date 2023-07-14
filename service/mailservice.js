@@ -1,5 +1,4 @@
 const User = require("../models/User");
-// const dotenv = require("dotenv");
 const mailer = require("nodemailer");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
@@ -7,9 +6,8 @@ const bcrypt = require("bcrypt");
 const resetpassword = async (req, res) => {
   try {
     const { id } = req.params;
-    // const { passeord } = req.body;
     const user1 = await User.findOne({ _id: id });
-    // console.log(user1);
+    // console.log(user1.password);
     var salt = bcrypt.genSaltSync(10);
     var hash = bcrypt.hashSync(req.body.password, salt);
     if (req.body.password) {
@@ -22,7 +20,10 @@ const resetpassword = async (req, res) => {
       },
       { new: true }
     );
-    res.status(200).send(edited);
+    User.find(edited)
+      .populate("User")
+      .exec(function (err, User) {});
+    res.status(200).send("password updated Successfully");
   } catch (error) {
     console.log(error);
   }
