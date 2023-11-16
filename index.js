@@ -64,6 +64,7 @@ app.use((err, req, res, next) => {
   });
 });
 
+console.log("aravindhan............................");
 const port = process.env.PORT;
 app.listen(port, async () => {
   await mongodb();
