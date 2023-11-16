@@ -11,7 +11,8 @@ const cookieParser = require("cookie-parser");
 var morgan = require("morgan");
 const CardRouter = require("./routers/Cardrouter");
 const path = require("path");
-const ejs = require("ejs");
+// const ejs = require("ejs");
+const exportrouter = require("./routers/export");
 
 //middleware
 
@@ -48,10 +49,11 @@ app.get("/", (req, res) => {
 app.use("/api/", forgetpassword);
 app.use("/api/", resetpassword);
 app.use("/api/auth/", authrouter);
-app.use("/api/profile/", profilerouter);
+// app.use("/api/profile/", profilerouter);
 app.use("/api/user/", userRouter);
 app.use("/api/company/", companyrouter);
 app.use("/api/card/", CardRouter);
+app.use("/api/", exportrouter);
 
 app.use((err, req, res, next) => {
   const errorstatus = err.status || 500;
@@ -64,8 +66,9 @@ app.use((err, req, res, next) => {
   });
 });
 
+console.log("hi this aravindhan");
 const port = process.env.PORT;
 app.listen(port, async () => {
   await mongodb();
-  console.log("Port is Running 4000");
+  console.log("Port is Running 4001");
 });
