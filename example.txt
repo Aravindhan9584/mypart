@@ -1,0 +1,100 @@
+fileLIVE SERVER CREDENCIAL or
+Application:
+
+SSH-simplex
+165.22.218.179
+Prod@2022EEBSSO
+mongodump -d study-sso-api -o /opt/backup_db/17112023_M
+
+simplex
+68.183.80.48
+SimplexLiveServer@2022
+mongodump -d simplex-form-api -o /opt/backup_db/17112023_M
+
+
+live login
+
+{"email":"saavan.t@euroeximbank.com","password":"39Thunder$"}
+
+local login
+
+{"email":"petchi60798@gmail.com","password":"1234567890"}
+
+
+mongorestore
+
+ mongorestore --db Simplexapi-li dump/Simplexapi-li
+
+mongorestore /opt/backup_db/02052023_M/study-sso-api -d study-sso-api
+mongorestore /opt/backup_db/02052023_M/simplex-form-api -d simplex-form-api	
+
+
+https://test.simplextf.com/
+
+
+
+sso -tradfin product
+ db.products.update({_id:ObjectId("5e3d843bf409db74ea6027a5")},{ $set : { "url": "http://simplextf.trdfin.in"}});
+db.products.update({_id:ObjectId("5e92b9d3bce86f5f7ee62170")},{ $set : { "http://develop.eebcs.com:6501/api/"}});
+	
+checking  credeincial
+
+SSOAPI
+159.89.168.203
+root
+sSo#741v
+
+
+SIMPLEX
+139.59.82.137
+root
+sImplex#741v
+
+
+local mongodb
+localhost:27017
+
+local
+mongorestore C:\backup\29032023_M\study-sso-api -d study-sso-api2
+
+
+app password
+ATBBS2PSZs4RVn8uEDm8C7vfr6ua80AA1461
+ATBBmdJ3jtxyD7rnNXC6GpZ2avX980725D5A
+
+	instrumentReportList(data) {
+		this.loadToken();
+		// return this.$http
+		//     .post(`${this.apiUrl}/instrument/getByDaysForInstrumentReport`,data, this.httpOptions)
+		//     .pipe(catchError(this.handleError("instrumentList", [])))
+		//     .toPromise();
+		return this.$http
+			.get(`${this.apiUrl}/instruments`, this.httpOptions)
+			.pipe(catchError(this.handleError("instrumentList", [])))
+			.toPromise();
+	}
+
+
+git tag v0.2.504
+
+git push origin v0.2.471
+
+git fetch
+
+git checkout v0.2.471
+
+pm2 list  
+
+pm2 restart 1
+
+pm2 log 1
+
+SIMPLEX TEST SERVER
+
+Host or IP Address : 159.89.173.68	 
+
+UN : root
+
+password : SimplexTestServer@123
+
+
