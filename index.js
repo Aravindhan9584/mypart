@@ -93,6 +93,8 @@ bluebard
 
 console.log(getData());
 
+console.log("this is testing commands..............all");
+
 // const fs = require("fs");
 
 // // Read a file asynchronously, line by line
